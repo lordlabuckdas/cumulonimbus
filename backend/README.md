@@ -1,10 +1,17 @@
 # backend
 
-* make the data from db available from the endpoint
-* set up cors and a strict csp
-* database options:
-	* mongo - nosql
-	* postgresql - sql
-* make it portable to elk
-* tech options:
-	* flask (python)
+**stack:** flask + mongodb
+
+## endpoints
+
+* `GET /api`
+* `GET /api/os/<os>`
+* `GET /api/domain/<domain>`
+* `GET /api/workgroup/<workgroup>`
+
+## setup
+
+```shell
+$ pip install -r requirements.txt
+$ flask run
+```
