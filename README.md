@@ -20,6 +20,36 @@
 
 can be changed acc to convenience
 
+## setup
+
+backend server and db:
+
+```shell
+$ docker-compose up
+```
+
+dcol dev env:
+
+```shell
+$ cd backend
+$ pip install -r requirements.txt
+$ cd dcol
+$ python main.py --help
+```
+
+populate db:
+
+```shell
+$ python tests/test_populate_db.py
+```
+
+**requirements:**
+
+* docker
+* docker-compose
+* nmap
+* python (w/ pip)
+
 ## standards
 
 * always prefer modules over executing sys commands
