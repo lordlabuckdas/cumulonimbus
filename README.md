@@ -8,16 +8,47 @@
 
 ```json
 {
-	"mac_address":"00:0d:83:b1:c0:8e",
-	"os":"linux",
-	"ad_info":"xyz@abc.com",
-	"last_seen":"2021/06/23 12:45:23",
-	"ip_address":"192.168.1.5",
-	"hostname":"ubuntu-dell-xps13"
+  "mac_address":"00:0d:83:b1:c0:8e",
+  "os":"linux",
+  "domain":"abc.com",
+  "workgroup":"abc",
+  "last_seen":"2021/06/23 12:45:23",
+  "ip_address":"192.168.1.5",
+  "hostname":"ubuntu-dell-xps13"
 }
 ```
 
 can be changed acc to convenience
+
+## setup
+
+backend server and db:
+
+```shell
+$ docker-compose up
+```
+
+dcol dev env:
+
+```shell
+$ cd backend
+$ pip install -r requirements.txt
+$ cd dcol
+$ python main.py --help
+```
+
+populate db:
+
+```shell
+$ python tests/test_populate_db.py
+```
+
+**requirements:**
+
+* docker
+* docker-compose
+* nmap
+* python (w/ pip)
 
 ## standards
 

@@ -1,0 +1,31 @@
+version: "3.9"
+
+networks:
+  nimbus:
+
+services:
+
+  # mongodb database
+  db:
+    container_name: nimbus_db
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - nimbus
+
+  # flask backend
+  backend:
+    container_name: nimbus_backend
+    build: ./backend
+    command: python -m flask run --host=0.0.0.0
+    volumes:
+      - ./backend:/app
+    ports:
+      - 5000:5000
+    networks:
+      - nimbus
+    depends_on:
+      - db
