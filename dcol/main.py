@@ -1,29 +1,7 @@
 import argparse
-
-# from dcol import DataCollector
-
-
-def main():
-    ap = argparse.ArgumentParser(description="CLI testing tool for the dcol API")
-    ap.add_argument("-t", "--target", help="IP address of the target")
-    ap.add_argument("-k", "--key", help="location of the ssh key")
-    # args = ap.parse_args()
-    # dcol = None
-    # try:
-    #     dcol = DataCollector(args.target, args.key)
-    # except Exception as err:
-    #     print(err)
-    # if not dcol:
-    #     print("DataCollector cannot be initialized!")
-    #     exit(1)
-    # try:
-    #     dcol.run()
-    # except Exception as err:
-    #     print(err)
-    #     print("Quitting!")
-    # finally:
-    #     dcol.close()
-
+import datetime
+import nmap
+from pymongo import MongoClient
 
 """
 {
@@ -37,23 +15,29 @@ def main():
 }
 """
 
-"""
-self.commands = {
-    "linux": {
-        "hostname": ["hostname", "hostnamectl | awk '/hostname/ {print $3}'", "cat /proc/sys/kernel/hostname"],
-        "mac_address": [
-            "ifconfig | awk '/ether/ {print $2}' | head -n 1",
-            "ip link show | awk '/ether/ {print $2}' | head -n 1",
-        ],
-        "ad_info": [""],
-    },
-    "win": {
-        "hostname": [""],
-        "mac_address": ["getmac"],
-        "ad_info": [""],
-    },
-}
-"""
+client = MongoClient("mongodb://db/")
+systems_table = client.assets.systems
+
+
+def scan_target(ip: str):
+    # some parsing to check if subnet or single ip
+    nm = nmap.PortScanner()
+    nm.scan(ip)
+    if nm[ip].state() != "up":
+        return
+    # OS detection with -O flag
+    # ad domain and workgroup - script
+    # mac address - use script if needed
+    item = {"last_seen": datetime.datetime.now(), "hostname": nm[ip].hostname()}
+    systems_table.insert_one(item)
+
+
+def main():
+    ap = argparse.ArgumentParser(description="CLI testing tool for the dcol API")
+    ap.add_argument("-t", "--target", help="IP address of the target")
+    args = ap.parse_args()
+    scan_target(args.target)
+
 
 if __name__ == "__main__":
     main()

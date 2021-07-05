@@ -2,7 +2,7 @@ from flask import Flask, jsonify, abort, Response, request
 from pymongo import MongoClient
 
 app = Flask(__name__)
-client = MongoClient()
+client = MongoClient("mongodb://db/")
 systems_table = client.assets.systems
 
 
