@@ -41,10 +41,26 @@ def workgroup_results(workgroup: str) -> Response:
     resp = get_response(data)
     return resp
 
+@app.route("/api/dcol", methods = ["POST"])
+def dcol_trigger() -> Response:
+    # collector = dcol(request.form["ip"])
+    status = True
+    # try:
+    #     collector.run()
+    # except Exception as err:
+    #     print(err)
+    #     status = False
+    # finally:
+    #     collector.close()
+    return jsonify({"success": status})
 
-@app.route("/api/search", methods=["POST"])
+
+@app.route("/api/search", methods=["GET", "POST"])
 def search() -> Response:
-    data = list(systems_table.find({request.form["category"]: request.form["query"]}, {"_id": False}))
+    if request.method == "GET":
+        data = list(systems_table.find({request.args.get("category"): request.args.get("query")}, {"_id": False}))
+    else:
+        data = list(systems_table.find({request.form["category"]: request.form["query"]}, {"_id": False}))
     resp = get_response(data)
     return resp
 
