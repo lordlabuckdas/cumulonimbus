@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, abort, Response, request
 from pymongo import MongoClient
 
+from dcol import DCol
+
 app = Flask(__name__)
 client = MongoClient("mongodb://db/")
 systems_table = client.assets.systems
@@ -21,48 +23,38 @@ def all_results() -> Response:
     return resp
 
 
-@app.route("/api/os/<os>")
-def os_results(os: str) -> Response:
-    data = list(systems_table.find({"os": os}, {"_id": False}))
-    resp = get_response(data)
-    return resp
-
-
-@app.route("/api/domain/<domain>")
-def domain_results(domain: str) -> Response:
-    data = list(systems_table.find({"domain": domain}, {"_id": False}))
-    resp = get_response(data)
-    return resp
-
-
-@app.route("/api/workgroup/<workgroup>")
-def workgroup_results(workgroup: str) -> Response:
-    data = list(systems_table.find({"workgroup": workgroup}, {"_id": False}))
-    resp = get_response(data)
-    return resp
-
-@app.route("/api/dcol", methods = ["POST"])
-def dcol_trigger() -> Response:
-    # collector = dcol(request.form["ip"])
-    status = True
-    # try:
-    #     collector.run()
-    # except Exception as err:
-    #     print(err)
-    #     status = False
-    # finally:
-    #     collector.close()
-    return jsonify({"success": status})
-
-
 @app.route("/api/search", methods=["GET", "POST"])
 def search() -> Response:
+    categories = ["mac_address", "os", "domain", "workgroup", "ip_address", "hostname"]
+    data = []
     if request.method == "GET":
-        data = list(systems_table.find({request.args.get("category"): request.args.get("query")}, {"_id": False}))
+        if request.args.get("category"):
+            categories = [request.args.get("category")]
+        query = request.args.get("query")
     else:
-        data = list(systems_table.find({request.form["category"]: request.form["query"]}, {"_id": False}))
+        if request.form["category"]:
+            categories = [request.form["category"]]
+        query = request.form["query"]
+    for category in categories:
+        data = list(systems_table.find({category: query}, {"_id": False}))
+        if data:
+            break
     resp = get_response(data)
     return resp
+
+
+@app.route("/api/dcol", methods=["POST"])
+def dcol_trigger() -> Response:
+    collector = DCol(request.form["ip"])
+    status = True
+    try:
+        collector.run()
+    except Exception as err:
+        print(err)
+        status = False
+    finally:
+        collector.close()
+    return jsonify({"success": status})
 
 
 @app.errorhandler(404)
