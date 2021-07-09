@@ -1,5 +1,5 @@
 import argparse
-from dcol import DCol
+from datacollector import DataCollector as DCol
 
 
 def main():
