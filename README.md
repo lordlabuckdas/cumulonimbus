@@ -22,13 +22,13 @@ can be changed acc to convenience
 
 ## setup
 
-backend server and db:
+### backend server and db
 
 ```shell
 $ docker-compose up
 ```
 
-dcol dev env:
+### dcol dev env
 
 ```shell
 $ cd backend
@@ -37,10 +37,16 @@ $ cd dcol
 $ python main.py --help
 ```
 
-populate db:
+### populate db
 
 ```shell
 $ python tests/test_populate_db.py
+```
+
+### test frontend2api connection
+
+```shell
+$ firefox tests/test_backend_api.html
 ```
 
 **requirements:**

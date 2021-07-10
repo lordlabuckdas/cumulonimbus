@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, abort, Response, request
+from flask_cors import CORS
 from pymongo import MongoClient, DESCENDING, ASCENDING
 
 # from dcol import DCol
 
 app = Flask(__name__)
+CORS(app, resources={r"/api*": {"origins": "*"}})
 client = MongoClient("mongodb://db/")
 systems_table = client.assets.systems
 MAX_RESULTS_PER_PAGE = 5
@@ -33,7 +35,7 @@ def get_response(data: list) -> Response:
 def all_results() -> Response:
     sort_key = request.args.get("sort") if request.args.get("sort") else "last_seen"
     sort_order = ASCENDING if request.args.get("asc") == "1" else DESCENDING
-    page_num = int(request.args.get("page")) if request.args.get("page") else 1
+    page_num = int(request.args.get("page", "1"))
     data = list(systems_table.find({}, {"_id": False}, sort=[(sort_key, sort_order)]))
     data = get_paginated_data(data, page_num)
     resp = get_response(data)
@@ -50,7 +52,7 @@ def search() -> Response:
     query = request.args.get("query")
     sort_key = request.args.get("sort") if request.args.get("sort") else "last_seen"
     sort_order = ASCENDING if request.args.get("asc") == "1" else DESCENDING
-    page_num = int(request.args.get("page")) if request.args.get("page") else 1
+    page_num = int(request.args.get("page", "1"))
     if not query:
         abort(404, description="No query passed")
     data = []
