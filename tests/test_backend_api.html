@@ -1,0 +1,30 @@
+<html>
+
+<head>
+	<title>
+		api check
+	</title>
+</head>
+
+<body>
+	<div class="api-lol">
+		<h1> api results </h1>
+	</div>
+	<script>
+		let apiDiv = document.querySelector("div.api-lol");
+		let apiData = new Array();
+		fetch("http://127.0.0.1:5000/api")
+			.then(resp => resp.json())
+			.then(data => {
+				apiDiv.innerHTML += "<ul>";
+				data.forEach(item => {
+					apiDiv.innerHTML += `<li>${JSON.stringify(item, null, "\t")}</li>`;
+					console.log(item);
+				});
+				apiDiv.innerHTML += "</ul>";
+			})
+			.catch(err => console.log(err));
+	</script>
+</body>
+
+</html>
