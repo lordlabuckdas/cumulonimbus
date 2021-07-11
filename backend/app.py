@@ -5,7 +5,7 @@ from pymongo import MongoClient, DESCENDING, ASCENDING
 # from dcol import DCol
 
 app = Flask(__name__)
-CORS(app, resources={r"/api*": {"origins": "*"}})
+CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
 client = MongoClient("mongodb://db/")
 systems_table = client.assets.systems
 MAX_RESULTS_PER_PAGE = 5

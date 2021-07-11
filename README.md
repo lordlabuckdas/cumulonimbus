@@ -22,6 +22,13 @@ can be changed acc to convenience
 
 ## setup
 
+### requirements
+
+* docker
+* docker-compose
+* nmap
+* python (w/ pip)
+
 ### backend server and db
 
 ```shell
@@ -46,15 +53,10 @@ $ python tests/test_populate_db.py
 ### test frontend2api connection
 
 ```shell
-$ firefox tests/test_backend_api.html
+$ python -m http.server 3000 --directory tests/
 ```
 
-**requirements:**
-
-* docker
-* docker-compose
-* nmap
-* python (w/ pip)
+then, open `http://localhost:3000/test_backend_api.html`
 
 ## standards
 
