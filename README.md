@@ -1,5 +1,7 @@
 # team cumulonimbus
 
+**project temporarily archived**
+
 * [frontend](frontend)
 * [backend](backend)
 * [dcol](dcol)
@@ -17,8 +19,6 @@
   "hostname":"ubuntu-dell-xps13"
 }
 ```
-
-can be changed acc to convenience
 
 ## setup
 
@@ -57,9 +57,3 @@ $ python -m http.server 3000 --directory tests/
 ```
 
 then, open `http://localhost:3000/test_backend_api.html`
-
-## standards
-
-* always prefer modules over executing sys commands
-* code in a pythonic way
-* snake_case and OOPs supremacy
